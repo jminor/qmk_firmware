@@ -1,1 +1,1 @@
-# The default keymap for Redox
+# jminor's customized keymap for Redox
