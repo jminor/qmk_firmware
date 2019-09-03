@@ -131,32 +131,28 @@ unsigned long int seed = 123456789;
 
 unsigned long int cheap_rand(void)
 {
-  seed = (1103515245 * seed + 12345) % 4294967296;
+  unsigned long int clocks = TCNT0 + TCNT1 + TCNT3 + TCNT4;
+  seed = ((1103515245 * seed + 12345) ^ clocks) % 4294967296;
   return seed;
 }
 
 void terminal_roll(void) {
   if (strlen(arguments[1]) != 0) {
       char* z;
-      char result[10];
-      int num = strtol(arguments[1], &z, 10);
-      int sides = strtol(z+1, (char **)NULL, 10);
+      char result[100];
+      unsigned int num = strtol(arguments[1], &z, 10);
+      unsigned int sides = strtol(z+1, (char **)NULL, 10);
       if (num && sides) {
           SEND_STRING("rolling ");
           itoa(num, result, 10);
           send_string(result);
-          SEND_STRING(" d ");
+          SEND_STRING("d");
           itoa(sides, result, 10);
           send_string(result);
-          SEND_STRING("...\n");
+          SEND_STRING("... ");
           int sum=0;
           for (int i=0; i<num; i++) {
-              int roll = (cheap_rand() % sides) + 1;
-              itoa(roll, result, 10);
-              SEND_STRING(" ");
-              send_string(result);
-              SEND_STRING("\n");
-              sum += roll;
+              sum += (cheap_rand() % sides) + 1;
           }
           itoa(sum, result, 10);
           send_string(result);
