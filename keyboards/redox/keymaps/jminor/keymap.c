@@ -16,7 +16,13 @@ enum custom_keycodes {
   SYMB,
   NAV,
   ADJUST,
+  DYNAMIC_MACRO_RANGE  // must be last
 };
+
+#include "dynamic_macro.h"
+#define REC_STRT DYN_REC_START1
+#define REC_STOP DYN_REC_STOP
+#define REC_PLAY DYN_MACRO_PLAY1
 
 // Shortcut to make keymap more readable
 #define SYM_L   MO(_SYMB)
@@ -60,9 +66,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      _______ ,KC_HASH ,KC_DLR  ,KC_LBRC ,KC_RBRC ,KC_GRV  ,KC_PREV ,                          KC_NEXT, XXXXXXX ,KC_KP_4 ,KC_KP_5 ,KC_KP_6 ,XXXXXXX ,XXXXXXX ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______ ,KC_PERC ,KC_CIRC ,KC_LPRN ,KC_RPRN ,KC_TILD ,KC_VOLUP,KC_VOLDN,        _______ ,_______ ,XXXXXXX ,KC_KP_1 ,KC_KP_2 ,KC_KP_3 ,XXXXXXX ,XXXXXXX ,
+     _______ ,KC_PERC ,KC_CIRC ,KC_LPRN ,KC_RPRN ,KC_TILD ,KC_VOLUP,KC_VOLDN,        REC_STRT,REC_STOP,XXXXXXX ,KC_KP_1 ,KC_KP_2 ,KC_KP_3 ,XXXXXXX ,XXXXXXX ,
   //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-     _______ ,_______ ,_______ ,_______ ,     _______ ,    _______ ,KC_PLAY ,        _______ ,_______ ,    KC_KP_0 ,     KC_KP_0 ,KC_PDOT ,XXXXXXX ,XXXXXXX 
+     _______ ,_______ ,_______ ,_______ ,     _______ ,    _______ ,KC_PLAY ,        REC_PLAY,_______ ,    KC_KP_0 ,     KC_KP_0 ,KC_PDOT ,XXXXXXX ,XXXXXXX 
   //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
   ),
 
@@ -95,3 +101,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 
 };
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+   if (!process_record_dynamic_macro(keycode, record)) {
+      return false;
+   }
+   return true;
+}
