@@ -127,77 +127,116 @@ void terminal_about(void) {
 
 void terminal_help(void);
 
-extern const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS];
+unsigned long int seed = 123456789;
 
-void terminal_keycode(void) {
-    if (strlen(arguments[1]) != 0 && strlen(arguments[2]) != 0 && strlen(arguments[3]) != 0) {
-        char keycode_dec[5];
-        char keycode_hex[5];
-        uint16_t layer = strtol(arguments[1], (char **)NULL, 10);
-        uint16_t row = strtol(arguments[2], (char **)NULL, 10);
-        uint16_t col = strtol(arguments[3], (char **)NULL, 10);
-        uint16_t keycode = pgm_read_word(&keymaps[layer][row][col]);
-        itoa(keycode, keycode_dec, 10);
-        itoa(keycode, keycode_hex, 16);
-        SEND_STRING("0x");
-        send_string(keycode_hex);
-        SEND_STRING(" (");
-        send_string(keycode_dec);
-        SEND_STRING(")\n");
-    } else {
-        #ifdef TERMINAL_HELP
-            SEND_STRING("usage: keycode <layer> <row> <col>\n");
-        #endif
-    }
+unsigned long int cheap_rand(void)
+{
+  seed = (1103515245 * seed + 12345) % 4294967296;
+  return seed;
 }
 
-void terminal_keymap(void) {
-    if (strlen(arguments[1]) != 0) {
-        uint16_t layer = strtol(arguments[1], (char **)NULL, 10);
-        for (int r = 0; r < MATRIX_ROWS; r++) {
-            for (int c = 0; c < MATRIX_COLS; c++) {
-                uint16_t keycode = pgm_read_word(&keymaps[layer][r][c]);
-                char keycode_s[8];
-                sprintf(keycode_s, "0x%04x,", keycode);
-                send_string(keycode_s);
-            }
-            send_string(newline);
-        }
-    } else {
-        #ifdef TERMINAL_HELP
-            SEND_STRING("usage: keymap <layer>\n");
-        #endif
-    }
-}
-
-void print_cmd_buff(void) {
-  /* without the below wait, a race condition can occur wherein the
-   buffer can be printed before it has been fully moved */
-  wait_ms(250);
-  for(int i=0;i<CMD_BUFF_SIZE;i++){
-    char tmpChar = ' ';
-    itoa(i ,&tmpChar,10);
-    const char * tmpCnstCharStr = &tmpChar; //because sned_string wont take a normal char *
-    send_string(tmpCnstCharStr);
-    SEND_STRING(". ");
-    send_string(cmd_buffer[i]);
-    SEND_STRING("\n");
+void terminal_roll(void) {
+  if (strlen(arguments[1]) != 0) {
+      char* z;
+      char result[10];
+      int num = strtol(arguments[1], &z, 10);
+      int sides = strtol(z+1, (char **)NULL, 10);
+      if (num && sides) {
+          SEND_STRING("rolling ");
+          itoa(num, result, 10);
+          send_string(result);
+          SEND_STRING(" d ");
+          itoa(sides, result, 10);
+          send_string(result);
+          SEND_STRING("...\n");
+          int sum=0;
+          for (int i=0; i<num; i++) {
+              int roll = (cheap_rand() % sides) + 1;
+              itoa(roll, result, 10);
+              SEND_STRING(" ");
+              send_string(result);
+              SEND_STRING("\n");
+              sum += roll;
+          }
+          itoa(sum, result, 10);
+          send_string(result);
+          SEND_STRING("\n");
+      }
   }
 }
 
+extern const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS];
 
-void flush_cmd_buffer(void) {
-  memset(cmd_buffer,0,CMD_BUFF_SIZE * 80);
-  SEND_STRING("Buffer Cleared!\n");
-}
+// void terminal_keycode(void) {
+//     if (strlen(arguments[1]) != 0 && strlen(arguments[2]) != 0 && strlen(arguments[3]) != 0) {
+//         char keycode_dec[5];
+//         char keycode_hex[5];
+//         uint16_t layer = strtol(arguments[1], (char **)NULL, 10);
+//         uint16_t row = strtol(arguments[2], (char **)NULL, 10);
+//         uint16_t col = strtol(arguments[3], (char **)NULL, 10);
+//         uint16_t keycode = pgm_read_word(&keymaps[layer][row][col]);
+//         itoa(keycode, keycode_dec, 10);
+//         itoa(keycode, keycode_hex, 16);
+//         SEND_STRING("0x");
+//         send_string(keycode_hex);
+//         SEND_STRING(" (");
+//         send_string(keycode_dec);
+//         SEND_STRING(")\n");
+//     } else {
+//         #ifdef TERMINAL_HELP
+//             SEND_STRING("usage: keycode <layer> <row> <col>\n");
+//         #endif
+//     }
+// }
+
+// void terminal_keymap(void) {
+//     if (strlen(arguments[1]) != 0) {
+//         uint16_t layer = strtol(arguments[1], (char **)NULL, 10);
+//         for (int r = 0; r < MATRIX_ROWS; r++) {
+//             for (int c = 0; c < MATRIX_COLS; c++) {
+//                 uint16_t keycode = pgm_read_word(&keymaps[layer][r][c]);
+//                 char keycode_s[8];
+//                 sprintf(keycode_s, "0x%04x,", keycode);
+//                 send_string(keycode_s);
+//             }
+//             send_string(newline);
+//         }
+//     } else {
+//         #ifdef TERMINAL_HELP
+//             SEND_STRING("usage: keymap <layer>\n");
+//         #endif
+//     }
+// }
+
+// void print_cmd_buff(void) {
+//   /* without the below wait, a race condition can occur wherein the
+//    buffer can be printed before it has been fully moved */
+//   wait_ms(250);
+//   for(int i=0;i<CMD_BUFF_SIZE;i++){
+//     char tmpChar = ' ';
+//     itoa(i ,&tmpChar,10);
+//     const char * tmpCnstCharStr = &tmpChar; //because sned_string wont take a normal char *
+//     send_string(tmpCnstCharStr);
+//     SEND_STRING(". ");
+//     send_string(cmd_buffer[i]);
+//     SEND_STRING("\n");
+//   }
+// }
+
+
+// void flush_cmd_buffer(void) {
+//   memset(cmd_buffer,0,CMD_BUFF_SIZE * 80);
+//   SEND_STRING("Buffer Cleared!\n");
+// }
 
 stringcase terminal_cases[] = {
     { "about", terminal_about },
     { "help", terminal_help },
-    { "keycode", terminal_keycode },
-    { "keymap", terminal_keymap },
-    { "flush-buffer" , flush_cmd_buffer},
-    { "print-buffer" , print_cmd_buff},
+    // { "keycode", terminal_keycode },
+    // { "keymap", terminal_keymap },
+    // { "flush-buffer" , flush_cmd_buffer},
+    // { "print-buffer" , print_cmd_buff},
+    { "roll", terminal_roll },
     { "exit", disable_terminal }
 };
 
