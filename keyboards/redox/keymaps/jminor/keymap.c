@@ -62,13 +62,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
      RESET   ,KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_F5   ,                                            KC_F6   ,KC_F7   ,KC_F8   ,KC_F9   ,KC_F10  ,KC_DEL  ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     TERM_ON ,KC_EXLM ,KC_AT   ,KC_LCBR ,KC_RCBR ,KC_PIPE ,_______ ,                          _______ ,XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX ,KC_BSLS ,
+     TERM_ON ,KC_EXLM ,KC_AT   ,KC_LCBR ,KC_RCBR ,KC_PIPE ,KC_LSFT ,                          KC_RSFT ,KC_QUOT ,KC_UNDS ,KC_MINS ,KC_EQL  ,KC_PLUS ,KC_BSLS ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      TERM_OFF,KC_HASH ,KC_DLR  ,KC_LBRC ,KC_RBRC ,KC_GRV  ,KC_PREV ,                          KC_NEXT, XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX ,KC_QUOT ,_______ ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      _______ ,KC_PERC ,KC_CIRC ,KC_LPRN ,KC_RPRN ,KC_TILD ,KC_VOLUP,KC_VOLDN,        REC_STRT,REC_STOP,XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX ,KC_PGUP ,_______ ,
   //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-     _______ ,_______ ,_______ ,_______ ,     _______ ,    KC_WAKE ,KC_PLAY ,        REC_PLAY,KC_WAKE ,    _______ ,     KC_BSLS ,KC_HOME ,KC_PGDN ,KC_END 
+     _______ ,KC_PWR  ,KC_SLEP ,_______ ,     _______ ,    KC_WAKE ,KC_PLAY ,        REC_PLAY,KC_WAKE ,    _______ ,     KC_BSLS ,KC_HOME ,KC_PGDN ,KC_END 
   //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
   ),
 
