@@ -1,3 +1,12 @@
+// NOTES:
+// Edit this file.
+// Run this:
+//   qmk compile -kb massdrop/ctrl -km jminor
+//   qmk flash
+// or just this:
+//   qmk compile && qmk flash
+// Hold Fn-B for a few seconds, then release
+
 #include QMK_KEYBOARD_H
 
 enum ctrl_keycodes {
@@ -20,12 +29,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LCTL, KC_LALT, KC_LGUI,                   KC_SPC,                             KC_RGUI, KC_RALT, KC_RCTL, MO(1),              KC_LEFT, KC_DOWN, KC_RGHT
     ),
     [1] = LAYOUT(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,            KC_MUTE, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,   KC_MPLY, KC_MSTP, KC_VOLU,
-        _______, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, _______, U_T_AUTO,U_T_AGCR,_______, _______, _______, _______, _______,   KC_MPRV, KC_MNXT, KC_VOLD,
+        _______, DM_REC1, DM_RSTP, DM_PLY1, _______, DM_REC2, DM_RSTP, DM_PLY2, _______, _______, _______, _______, _______,            KC_MPLY, _______, KC_MSTP,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,   KC_VOLU, KC_BRIU, KC_MNXT,
+        _______, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, _______, U_T_AUTO,U_T_AGCR,_______, _______, _______, _______, _______,   KC_VOLD, KC_BRID, KC_MPRV,
         _______, RGB_RMOD,RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, _______, _______, _______, _______, _______, _______, _______,
-        _______, RGB_TOG, _______, _______, _______, MD_BOOT, NK_TOGG, _______, _______, _______, _______, _______,                              _______,
-        _______, _______, _______,                   _______,                            _______, _______, _______, _______,            _______, _______, _______
+        _______, RGB_TOG, _______, _______, _______, MD_BOOT, NK_TOGG, _______, _______, _______, _______, _______,                              KC_WH_U,
+        _______, _______, _______,                   _______,                            _______, _______, _______, _______,            KC_MRWD, KC_WH_D, KC_MFFD
     ),
     /*
     [X] = LAYOUT(
